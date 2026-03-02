@@ -22,45 +22,44 @@
             align-items: center;
             height: 100vh;
             color: var(--text-light);
+            overflow: hidden;
         }
 
         .header {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             animation: fadeInDown 0.8s ease;
         }
 
         .header img {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--accent);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
             transition: transform 0.3s;
         }
 
-        .header img:hover { transform: scale(1.05); }
+        .header img:hover { transform: scale(1.1) rotate(5deg); }
 
         .header h1 {
-            margin: 10px 0 0;
-            font-size: 24px;
-            letter-spacing: 1px;
+            margin: 8px 0 0;
+            font-size: 22px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .chat-container {
-            width: 90%;
-            max-width: 500px;
-            height: 65vh;
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
+            width: 95%;
+            max-width: 550px;
+            height: 70vh;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
         .messages {
@@ -69,7 +68,7 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             scrollbar-width: thin;
             scrollbar-color: var(--accent) transparent;
         }
@@ -77,19 +76,20 @@
         .message {
             padding: 12px 16px;
             border-radius: 18px;
-            max-width: 80%;
+            max-width: 85%;
             font-size: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
             word-wrap: break-word;
-            animation: slideIn 0.3s ease-out;
+            animation: slideIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
         }
 
         .user {
-            background: var(--accent);
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
             align-self: flex-end;
             color: #000;
             border-bottom-right-radius: 4px;
             font-weight: 500;
+            box-shadow: 0 4px 10px rgba(56, 189, 248, 0.2);
         }
 
         .bot {
@@ -100,35 +100,41 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .loading {
+        .loading-dots {
             font-style: italic;
-            opacity: 0.6;
+            opacity: 0.7;
             font-size: 13px;
+            margin-top: 5px;
         }
 
         .input-area {
             display: flex;
             padding: 15px;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.9);
             gap: 10px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
         input {
             flex: 1;
-            padding: 12px 18px;
+            padding: 14px 20px;
             border: 1px solid #475569;
-            border-radius: 25px;
+            border-radius: 30px;
             outline: none;
             background: #1e293b;
             color: white;
-            transition: border 0.3s;
+            transition: all 0.3s;
         }
 
-        input:focus { border-color: var(--accent); }
+        input:focus { 
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
 
         button {
-            padding: 0 20px;
-            border-radius: 25px;
+            padding: 0 25px;
+            border-radius: 30px;
             border: none;
             background: var(--accent);
             color: #000;
@@ -138,17 +144,17 @@
         }
 
         button:hover {
-            background: #0ea5e9;
-            transform: scale(1.05);
+            background: #7dd3fc;
+            transform: translateY(-2px);
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(10px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-25px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -162,23 +168,24 @@
 
 <div class="chat-container">
     <div class="messages" id="messages">
-        <div class="message bot">কি রে পিচ্চি! কিছু জিগাবি? নাকি খালি হা করিয়া তাকায়া থাকবি?</div>
+        <div class="message bot">কিরে পিচ্চি, আইসা পড়লি? ক কী জিগাবি? (Gemma-3-27b এখন রেডি!)</div>
     </div>
 
     <div class="input-area">
-        <input type="text" id="userInput" placeholder="মন খুলে কিছু বল...">
+        <input type="text" id="userInput" placeholder="কিছু একটা লেখ তো বেটা...">
         <button onclick="sendMessage()">পাঠাও</button>
     </div>
 </div>
 
 <script>
-// আপনার API KEY ঠিক আছে, তবে মডেল নামটি আপডেট করা হয়েছে।
-const API_KEY = "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";
+// নতুন API Key এবং Gemma-3 মডেল সেট করা হয়েছে
+const API_KEY = "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";
+const MODEL_NAME = "google/gemma-3-27b-it:free";
 
 let chatHistory = [
     {
         role: "system",
-        content: "তোমার নাম 'শাকিব ভাইয়ের চেলা'। তুমি খুব মজার এবং একটু রাগী রাগী ভাব দেখাও এমন বন্ধু। তুমি সব উত্তর বাংলায় দিবে। তোমার কথাবার্তায় 'হালা', 'বেটা', 'পিচ্চি' এই ধরণের মজার শব্দ ব্যবহার করবে। একদম খাঁটি দেশি বন্ধুদের মতো কথা বলবে।"
+        content: "তোমার নাম 'শাকিব ভাইয়ের চেলা'। তুমি শাকিব নামের একজনের অ্যাসিস্ট্যান্ট বা বন্ধু। তুমি খুব মজার, একটু অসভ্য কিন্তু বন্ধুসুলভ টোনে কথা বলো। মানুষকে তুমি 'হালা', 'বেটা', 'পিচ্চি', 'ভাগ্নী' এসব বলে সম্বোধন করো। সবসময় বাংলায় উত্তর দিবে।"
     }
 ];
 
@@ -195,7 +202,7 @@ async function sendMessage() {
     chatHistory.push({ role: "user", content: message });
     input.value = "";
 
-    const loadingMsg = addMessage("দাঁড়া, ভাবতেছি...", "bot loading");
+    const loadingMsg = addMessage("দাঁড়া, মাথা খাটাইতাছি...", "bot loading-dots");
 
     try {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -203,37 +210,37 @@ async function sendMessage() {
             headers: {
                 "Authorization": `Bearer ${API_KEY}`,
                 "Content-Type": "application/json",
-                "HTTP-Referer": window.location.href, // OpenRouter এর জন্য প্রয়োজন হতে পারে
-                "X-Title": "Shakib AI"
+                "HTTP-Referer": window.location.origin,
+                "X-Title": "Shakib AI v2"
             },
             body: JSON.stringify({
-                model: "google/gemini-2.0-flash-lite-preview-02-05:free", // সচল ফ্রি মডেল
-                messages: chatHistory
+                model: MODEL_NAME,
+                messages: chatHistory,
+                temperature: 0.8
             })
         });
 
         const data = await response.json();
         loadingMsg.remove();
 
-        if (data.error) {
-            addMessage("হালা, তোর API Key তে ঝামেলা আছে! এরর: " + data.error.message, "bot");
-            console.error(data.error);
-            return;
+        if (data.choices && data.choices.length > 0) {
+            const botReply = data.choices[0].message.content;
+            addMessage(botReply, "bot");
+            chatHistory.push({ role: "assistant", content: botReply });
+        } else {
+            addMessage("হালা, তোর API এ কাজ করতেছে না! এরর আসছে।", "bot");
+            console.log(data);
         }
 
-        const botReply = data.choices[0].message.content;
-        addMessage(botReply, "bot");
-        chatHistory.push({ role: "assistant", content: botReply });
-
     } catch (error) {
-        loadingMsg.innerText = "নেটওয়ার্ক ফালতু! আবার ট্রাই কর।";
+        loadingMsg.innerText = "আরে ধুর! নেট চলে গেছে মনে হয়।";
         console.error(error);
     }
 }
 
-function addMessage(text, sender) {
+function addMessage(text, className) {
     const msgDiv = document.createElement("div");
-    msgDiv.className = `message ${sender}`;
+    msgDiv.className = `message ${className}`;
     msgDiv.innerText = text;
     const container = document.getElementById("messages");
     container.appendChild(msgDiv);
